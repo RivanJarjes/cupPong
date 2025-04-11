@@ -88,9 +88,7 @@ public class Helpers {
             return result;
         }
     
-        /**
-         * Multiply two 4x4 matrices: out = a * b
-         */
+        // Multiply two 4x4 matrices: out = a * b
         public static Mat4 multiply(Mat4 a, Mat4 b) {
             Mat4 result = new Mat4();
             // Set to zero first
@@ -112,7 +110,7 @@ public class Helpers {
             return result;
         }
     
-        // pply a 4x4 matrix to a vector (x, y, z, w)Typically w=1 for positions, w=0 for directions
+        // apply a 4x4 matrix to a vector (x, y, z, w)Typically w=1 for positions, w=0 for directions
         public static double[] apply(Mat4 matrix, double[] vec4) {
             if(vec4.length < 4) {
                 throw new IllegalArgumentException("Vector must have length 4");

@@ -392,23 +392,29 @@ public class Renderer extends JPanel
     }
     
 
-    // Creates the perspective effect onto projected vertices in view
+    // Creates the perspective effect onto projected 3d vertices in 2d view
     private List<Helpers.VertexData> projectVertices(List<Helpers.VertexData> vertices, Helpers.Mat4 projMatrix, 
                                            int width, int height) {
         List<Helpers.VertexData> projectedVerts = new ArrayList<>();
         
         for (Helpers.VertexData vv : vertices) {
+            // Convert the 3D vertex into a 4D coordinate vector
             double[] v4 = { vv.x, vv.y, vv.z, 1.0 };
+            // Transform the vertex using the projection matrix
             double[] clip = Helpers.Mat4.apply(projMatrix, v4);
             
+            // Perform the perspective divide
             double ndcX = clip[0] / clip[3];
             double ndcY = clip[1] / clip[3];
             double ndcZ = clip[2] / clip[3];
             
+            // Map the NDC coordinates to screen space coordinates
             double sx = (ndcX * 0.5 + 0.5) * width;
             double sy = (-(ndcY * 0.5) + 0.5) * height;
+            // Stretches out the x component
             sx = (sx - width * 0.5) * 0.7 + width * 0.5;
             
+            // Compute depth which is just negative of the z coordinate
             double depth = -ndcZ;
             
             projectedVerts.add(new Helpers.VertexData(sx, sy, depth, vv.color));

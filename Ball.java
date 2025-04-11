@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class Ball extends Entity {
     // Physics constants
-    private static final double GRAVITY = 0.005;
-    private static final double BOUNCE_FACTOR = 0.8;  // Increased from 0.7 for more bounce
-    private static final double DRAG_FACTOR = 0.998;
-    private static final double FLOOR_Y = 0.0;
-    private static final double RICOCHET_RANDOMNESS = 0.02; // Small random factor for realistic bounces
+    private static final double GRAVITY = 0.005; // Self-explanatory
+    private static final double BOUNCE_FACTOR = 0.8;  // How much it bounces
+    private static final double DRAG_FACTOR = 0.998; // Air-resistance
+    private static final double FLOOR_Y = 0.0; // Where the floor's Y-coordinate is at
+    private static final double RICOCHET_RANDOMNESS = 0.225; // Small random factor for realistic bounces
     private static final Random random = new Random();
     
     // Out of bounds constants
@@ -24,7 +24,7 @@ public class Ball extends Entity {
     private static final double ORIGIN_Z = 14.3;
     
     // Ball properties
-    private final double radius = 0.25;
+    private final double radius = 0.20;
     private boolean active;
     private boolean insideCup = false;
     private Cup containerCup = null;
@@ -426,9 +426,7 @@ public class Ball extends Entity {
         return Math.abs(dist - wallRadius) < SAFE_MARGIN;
     }
     
-    /**
-     * Handle wall collision with enhanced ricochet
-     */
+    // Handle wall collision with enhanced ricochet
     private void handleWallCollision(double dist, double dx, double dz, double wallRadius, 
                                     double cupX, double cupZ) {
         // Calculate normal (unit vector pointing outward from cup center)
@@ -479,25 +477,19 @@ public class Ball extends Entity {
         }
     }
     
-    /**
-     * Detect if ball entered cup
-     */
+    // Detect if ball entered cup
     private boolean detectEnteredCup(double dist, double wallRadius, double ballY, double cupY) {
         return !insideCup && dist < wallRadius - radius && ballY < cupY + 1.0;
     }
     
-    /**
-     * Handle entering cup
-     */
+    // Handle entering cup
     private void handleEnteredCup(Cup cup) {
         insideCup = true;
         containerCup = cup;
         velocity.multInPlace(0.6);
     }
     
-    /**
-     * Handle collision when inside cup with enhanced ricochet
-     */
+    // Handle collision when inside cup with enhanced ricochet
     private void handleInsideCupCollision(double tempY, double cupY, double dist) {
         // Check if hitting bottom
         if (tempY + radius > cupY) {
@@ -538,9 +530,7 @@ public class Ball extends Entity {
         }
     }
     
-    /**
-     * Final safety check to prevent the ball from ever being inside a wall
-     */
+    // Final safety check to prevent the ball from ever being inside a wall
     private void enforceNoWallClipping() {
         // Stop any crazy velocities (emergency safety)
         if (Math.abs(velocity.x) > 0.5 || Math.abs(velocity.z) > 0.5) {
